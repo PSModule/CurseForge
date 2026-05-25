@@ -31,12 +31,10 @@
         [int] $GameId
     )
 
-    begin {
-        $context = Resolve-CurseForgeContext
-    }
+    begin {}
 
     process {
-        $response = Invoke-CurseForgeAPI -Context $context -Endpoint "/v1/games/$GameId/version-types" -NoPagination
+        $response = Invoke-CurseForgeAPI -Endpoint "/v1/games/$GameId/version-types" -NoPagination
         foreach ($versionType in $response) {
             [CurseForgeGameVersionType]::new($versionType)
         }

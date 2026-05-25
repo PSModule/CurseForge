@@ -66,18 +66,88 @@
     }
 
     process {
-        $invokeAPISplat = @{
-            Context      = $context
-            Endpoint     = $Endpoint
-            Method       = $Method
-            NoPagination = $NoPagination
+        $baseUri = $context.ApiBaseUri.TrimEnd('/')
+        $uri = "$baseUri/$($Endpoint.TrimStart('/'))"
+
+        $apiKeyPlain = [System.Net.NetworkCredential]::new('', $context.ApiKey).Password
+
+        $headers = @{
+            'x-api-key' = $apiKeyPlain
+            'Accept'    = 'application/json'
         }
 
-        if ($Body) {
-            $invokeAPISplat.Body = $Body
+        if ($NoPagination -or $Method -ne 'Get') {
+            $invokeRestSplat = @{
+                Uri         = $uri
+                Method      = $Method
+                Headers     = $headers
+                ContentType = 'application/json'
+            }
+
+            if ($Body) {
+                $invokeRestSplat.Body = ($Body | ConvertTo-Json -Depth 10)
+            }
+
+            try {
+                $response = Invoke-RestMethod @invokeRestSplat
+            } catch {
+                $statusCode = $_.Exception.Response.StatusCode.value__
+                throw "CurseForge API error [$statusCode] on $Method $Endpoint"
+            }
+
+            if ($null -ne $response.data) {
+                return $response.data
+            }
+            return $response
         }
 
-        Invoke-CurseForgeAPI @invokeAPISplat
+        # Auto-pagination for GET requests
+        $pageSize = $script:CurseForge.DefaultConfig.PageSize
+        $index = 0
+        $allResults = [System.Collections.Generic.List[object]]::new()
+
+        do {
+            $separator = if ($uri.Contains('?')) { '&' } else { '?' }
+            $pagedUri = "${uri}${separator}index=${index}&pageSize=${pageSize}"
+
+            $invokeRestSplat = @{
+                Uri         = $pagedUri
+                Method      = 'Get'
+                Headers     = $headers
+                ContentType = 'application/json'
+            }
+
+            try {
+                $response = Invoke-RestMethod @invokeRestSplat
+            } catch {
+                $statusCode = $_.Exception.Response.StatusCode.value__
+                throw "CurseForge API error [$statusCode] on GET $Endpoint"
+            }
+
+            if ($null -ne $response.data) {
+                foreach ($item in $response.data) {
+                    $allResults.Add($item)
+                }
+            }
+
+            $pagination = $response.pagination
+            if (-not $pagination) {
+                break
+            }
+
+            $resultCount = $pagination.resultCount
+            $index += $pageSize
+
+            if ($resultCount -lt $pageSize) {
+                break
+            }
+
+            if (($index + $pageSize) -gt 10000) {
+                break
+            }
+        } while ($true)
+
+        $allResults
     }
 
     end {}

@@ -36,18 +36,16 @@
         [int] $Id
     )
 
-    begin {
-        $context = Resolve-CurseForgeContext
-    }
+    begin {}
 
     process {
         switch ($PSCmdlet.ParameterSetName) {
             'Get a game by ID' {
-                $response = Invoke-CurseForgeAPI -Context $context -Endpoint "/v1/games/$Id" -NoPagination
+                $response = Invoke-CurseForgeAPI -Endpoint "/v1/games/$Id" -NoPagination
                 [CurseForgeGame]::new($response)
             }
             'List all games' {
-                $response = Invoke-CurseForgeAPI -Context $context -Endpoint '/v1/games'
+                $response = Invoke-CurseForgeAPI -Endpoint '/v1/games'
                 foreach ($game in $response) {
                     [CurseForgeGame]::new($game)
                 }

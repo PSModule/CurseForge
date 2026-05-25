@@ -32,12 +32,10 @@
         [int] $GameId
     )
 
-    begin {
-        $context = Resolve-CurseForgeContext
-    }
+    begin {}
 
     process {
-        $response = Invoke-CurseForgeAPI -Context $context -Endpoint "/v2/games/$GameId/versions" -NoPagination
+        $response = Invoke-CurseForgeAPI -Endpoint "/v2/games/$GameId/versions" -NoPagination
         foreach ($versionGroup in $response) {
             [pscustomobject]@{
                 Type     = $versionGroup.type
