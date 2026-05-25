@@ -53,7 +53,7 @@
                 $ApiKey = ConvertTo-SecureString $env:CURSEFORGE_API_KEY -AsPlainText -Force
             } else {
                 throw 'No API key provided. Pass -ApiKey or set the CURSEFORGE_API_KEY environment variable. ' +
-                    'Obtain a key from https://authors-old.curseforge.com/account/api-tokens.'
+                'Obtain a key from https://authors-old.curseforge.com/account/api-tokens.'
             }
         }
 
