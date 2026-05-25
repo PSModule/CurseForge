@@ -1,53 +1,66 @@
-# {{ NAME }}
+# CurseForge
 
-{{ DESCRIPTION }}
+A PowerShell module that interacts with the [CurseForge API](https://docs.curseforge.com/rest-api/).
+
+Provides ergonomic commands for querying games, mods, files, categories, fingerprints, and Minecraft-specific data from the CurseForge Core API, with planned support for the Upload API.
 
 ## Prerequisites
 
-This uses the following external resources:
-- The [PSModule framework](https://github.com/PSModule/Process-PSModule) for building, testing and publishing the module.
+- PowerShell 7.0 or later
+- A CurseForge API key from the [CurseForge for Studios Console](https://console.curseforge.com/)
+- The [PSModule framework](https://github.com/PSModule/Process-PSModule) for building, testing and publishing the module
 
 ## Installation
 
-To install the module from the PowerShell Gallery, you can use the following command:
-
 ```powershell
-Install-PSResource -Name {{ NAME }}
-Import-Module -Name {{ NAME }}
+Install-PSResource -Name CurseForge
+Import-Module -Name CurseForge
 ```
 
 ## Usage
 
-Here is a list of example that are typical use cases for the module.
-
-### Example 1: Greet an entity
-
-Provide examples for typical commands that a user would like to do with the module.
+### Connect to the API
 
 ```powershell
-Greet-Entity -Name 'World'
-Hello, World!
+$apiKey = Read-Host 'API Key' -AsSecureString
+Connect-CurseForge -ApiKey $apiKey
 ```
 
-### Example 2
-
-Provide examples for typical commands that a user would like to do with the module.
+### List all games
 
 ```powershell
-Import-Module -Name PSModuleTemplate
+Get-CurseForgeGame
 ```
 
-### Find more examples
+### Get a specific game
 
-To find more examples of how to use the module, please refer to the [examples](examples) folder.
+```powershell
+Get-CurseForgeGame -Id 432
+```
 
-Alternatively, you can use the Get-Command -Module 'This module' to find more commands that are available in the module.
-To find examples of each of the commands you can use Get-Help -Examples 'CommandName'.
+### Get game version types
+
+```powershell
+Get-CurseForgeGameVersionType -GameId 432
+```
+
+### Get game versions
+
+```powershell
+Get-CurseForgeGameVersion -GameId 432
+```
+
+### Disconnect
+
+```powershell
+Disconnect-CurseForge
+```
 
 ## Documentation
 
-Link to further documentation if available, or describe where in the repository users can find more detailed documentation about
-the module's functions and features.
+For more examples, see the [examples](examples) folder.
+
+Use `Get-Command -Module CurseForge` to discover available commands and `Get-Help <CommandName> -Examples` for usage details.
 
 ## Contributing
 
@@ -66,4 +79,5 @@ You can either help by picking up an existing issue or submit a new one if you h
 
 ## Acknowledgements
 
-Here is a list of people and projects that helped this project in some way.
+- [CurseForge API Documentation](https://docs.curseforge.com/rest-api/)
+- [PSModule Framework](https://github.com/PSModule/Process-PSModule)

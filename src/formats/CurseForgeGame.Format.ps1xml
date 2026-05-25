@@ -2,59 +2,50 @@
 <Configuration>
     <ViewDefinitions>
         <View>
-            <Name>mygciview</Name>
+            <Name>CurseForgeGame</Name>
             <ViewSelectedBy>
-                <TypeName>System.IO.DirectoryInfo</TypeName>
-                <TypeName>System.IO.FileInfo</TypeName>
+                <TypeName>CurseForgeGame</TypeName>
             </ViewSelectedBy>
-            <GroupBy>
-                <PropertyName>PSParentPath</PropertyName>
-            </GroupBy>
             <TableControl>
                 <TableHeaders>
                     <TableColumnHeader>
-                        <Label>Mode</Label>
-                        <Width>7</Width>
-                        <Alignment>Left</Alignment>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>LastWriteTime</Label>
-                        <Width>26</Width>
-                        <Alignment>Right</Alignment>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>CreationTime</Label>
-                        <Width>26</Width>
-                        <Alignment>Right</Alignment>
-                    </TableColumnHeader>
-                    <TableColumnHeader>
-                        <Label>Length</Label>
-                        <Width>14</Width>
-                        <Alignment>Right</Alignment>
+                        <Label>Id</Label>
+                        <Width>8</Width>
                     </TableColumnHeader>
                     <TableColumnHeader>
                         <Label>Name</Label>
-                        <Alignment>Left</Alignment>
+                        <Width>30</Width>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Slug</Label>
+                        <Width>25</Width>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Status</Label>
+                        <Width>15</Width>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>ApiStatus</Label>
+                        <Width>10</Width>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
-                        <Wrap />
                         <TableColumnItems>
                             <TableColumnItem>
-                                <PropertyName>ModeWithoutHardLink</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>LastWriteTime</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>CreationTime</PropertyName>
-                            </TableColumnItem>
-                            <TableColumnItem>
-                                <PropertyName>Length</PropertyName>
+                                <PropertyName>Id</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Name</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Slug</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Status</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>ApiStatus</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
