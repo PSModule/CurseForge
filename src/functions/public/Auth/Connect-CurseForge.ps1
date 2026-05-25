@@ -27,8 +27,8 @@
         [CurseForgeContext]
 
         .NOTES
-        The API key is obtained from the CurseForge for Studios Console.
-        The Author Token is obtained from the CurseForge API Tokens page.
+        The API key is obtained from https://authors-old.curseforge.com/account/api-tokens.
+        If the ApiKey parameter is omitted, the value of the CURSEFORGE_API_KEY environment variable is used.
 
         .LINK
         https://psmodule.io/CurseForge/Functions/Auth/Connect-CurseForge/
@@ -36,8 +36,8 @@
     [OutputType([CurseForgeContext])]
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # The CurseForge Core API key.
-        [Parameter(Mandatory)]
+        # The CurseForge Core API key. If omitted, the CURSEFORGE_API_KEY environment variable is used.
+        [Parameter()]
         [securestring] $ApiKey,
 
         # The CurseForge Upload API author token.
@@ -48,6 +48,15 @@
     begin {}
 
     process {
+        if (-not $ApiKey) {
+            if ($env:CURSEFORGE_API_KEY) {
+                $ApiKey = ConvertTo-SecureString $env:CURSEFORGE_API_KEY -AsPlainText -Force
+            } else {
+                throw 'No API key provided. Pass -ApiKey or set the CURSEFORGE_API_KEY environment variable. ' +
+                    'Obtain a key from https://authors-old.curseforge.com/account/api-tokens.'
+            }
+        }
+
         $contextName = $script:CurseForge.ContextVault
 
         $context = [CurseForgeContext]::new()

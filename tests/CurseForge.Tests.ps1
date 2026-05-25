@@ -9,6 +9,13 @@
 [CmdletBinding()]
 param()
 
+BeforeAll {
+    # TEST_USER_PAT is the slot Process-PSModule uses to forward CURSEFORGE_API_KEY into the test job.
+    if ($env:TEST_USER_PAT -and -not $env:CURSEFORGE_API_KEY) {
+        $env:CURSEFORGE_API_KEY = $env:TEST_USER_PAT
+    }
+}
+
 Describe 'CurseForge' {
     Describe 'CurseForgeContext' {
         Context 'CurseForgeContext - create with Name and ApiKey' {
@@ -103,8 +110,7 @@ Describe 'CurseForge' {
     Describe 'Get-CurseForgeGame' {
         BeforeEach {
             if ($env:CURSEFORGE_API_KEY) {
-                $key = ConvertTo-SecureString $env:CURSEFORGE_API_KEY -AsPlainText -Force
-                $script:CurseForge.Config = [CurseForgeContext]::new('Test', $key)
+                Connect-CurseForge
             }
         }
 
@@ -132,8 +138,7 @@ Describe 'CurseForge' {
     Describe 'Get-CurseForgeGameVersionType' {
         BeforeEach {
             if ($env:CURSEFORGE_API_KEY) {
-                $key = ConvertTo-SecureString $env:CURSEFORGE_API_KEY -AsPlainText -Force
-                $script:CurseForge.Config = [CurseForgeContext]::new('Test', $key)
+                Connect-CurseForge
             }
         }
 
@@ -153,8 +158,7 @@ Describe 'CurseForge' {
     Describe 'Get-CurseForgeGameVersion' {
         BeforeEach {
             if ($env:CURSEFORGE_API_KEY) {
-                $key = ConvertTo-SecureString $env:CURSEFORGE_API_KEY -AsPlainText -Force
-                $script:CurseForge.Config = [CurseForgeContext]::new('Test', $key)
+                Connect-CurseForge
             }
         }
 
@@ -167,6 +171,32 @@ Describe 'CurseForge' {
                 $versions = Get-CurseForgeGameVersion -GameId 432
                 $versions | Should -Not -BeNullOrEmpty
                 $versions[0].Type | Should -Not -BeNullOrEmpty
+            }
+        }
+    }
+
+    Describe 'Invoke-CurseForgeAPI' {
+        BeforeEach {
+            if ($env:CURSEFORGE_API_KEY) {
+                Connect-CurseForge
+            }
+        }
+
+        AfterEach {
+            $script:CurseForge.Config = $null
+        }
+
+        Context 'Invoke-CurseForgeAPI - GET endpoint' {
+            It 'Invoke-CurseForgeAPI - returns raw data from a GET endpoint' -Skip:(-not $env:CURSEFORGE_API_KEY) {
+                $result = Invoke-CurseForgeAPI -Endpoint '/v1/games'
+                $result | Should -Not -BeNullOrEmpty
+            }
+        }
+
+        Context 'Invoke-CurseForgeAPI - GET endpoint with NoPagination' {
+            It 'Invoke-CurseForgeAPI - returns raw data without pagination' -Skip:(-not $env:CURSEFORGE_API_KEY) {
+                $result = Invoke-CurseForgeAPI -Endpoint '/v1/games' -NoPagination
+                $result | Should -Not -BeNullOrEmpty
             }
         }
     }
