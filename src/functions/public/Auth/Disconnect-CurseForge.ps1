@@ -1,4 +1,6 @@
-﻿function Disconnect-CurseForge {
+﻿#Requires -Modules @{ ModuleName = 'Context'; ModuleVersion = '8.0.0'; MaximumVersion = '8.999.999' }
+
+function Disconnect-CurseForge {
     <#
         .SYNOPSIS
         Disconnect from the CurseForge API and remove stored credentials.

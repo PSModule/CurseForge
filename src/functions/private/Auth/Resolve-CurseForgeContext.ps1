@@ -1,4 +1,6 @@
-﻿function Resolve-CurseForgeContext {
+﻿#Requires -Modules @{ ModuleName = 'Context'; ModuleVersion = '8.0.0'; MaximumVersion = '8.999.999' }
+
+function Resolve-CurseForgeContext {
     [OutputType([CurseForgeContext])]
     [CmdletBinding()]
     param()
