@@ -8,10 +8,11 @@
             . $_.FullName
         }
 
-        # Dot-source classes
-        Get-ChildItem -Path (Join-Path $srcPath 'classes') -Filter '*.ps1' -Recurse | ForEach-Object {
-            . $_.FullName
-        }
+        # Dot-source classes in dependency order
+        . (Join-Path $srcPath 'classes/public/CurseForgeContext.ps1')
+        . (Join-Path $srcPath 'classes/public/CurseForgeGameAssets.ps1')
+        . (Join-Path $srcPath 'classes/public/CurseForgeGame.ps1')
+        . (Join-Path $srcPath 'classes/public/CurseForgeGameVersionType.ps1')
 
         # Dot-source variables
         Get-ChildItem -Path (Join-Path $srcPath 'variables') -Filter '*.ps1' -Recurse | ForEach-Object {
@@ -175,7 +176,7 @@
             $games = Get-CurseForgeGame
             $games | Should -HaveCount 1
             $games[0].Name | Should -Be 'Minecraft'
-            $games[0] | Should -BeOfType 'CurseForgeGame'
+            $games[0].GetType().Name | Should -Be 'CurseForgeGame'
         }
 
         It 'Returns a single game by ID' {
@@ -199,7 +200,7 @@
 
             $game = Get-CurseForgeGame -Id 432
             $game.Id | Should -Be 432
-            $game | Should -BeOfType 'CurseForgeGame'
+            $game.GetType().Name | Should -Be 'CurseForgeGame'
         }
     }
 }
