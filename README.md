@@ -4,7 +4,7 @@ CurseForge is intended to be a PowerShell module for interacting with the CurseF
 
 ## Status
 
-This repository is currently a placeholder. The module source still contains scaffold code, so there are no supported commands or usage examples to document yet.
+This repository is currently a placeholder. The module source and `examples/` directory still contain scaffold code, so there are no supported commands or module-specific usage examples to document yet.
 
 ## Documentation
 
